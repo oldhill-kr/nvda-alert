@@ -18,7 +18,10 @@ for u in URLS:
             new.append((t, l)); seen.add(l)
 if new and os.environ.get("TELEGRAM_TOKEN"):
     msg = "🚨 젠슨황 해임 관련 새 뉴스\n\n" + "\n\n".join(f"{t}\n{l}" for t, l in new[:8])
-    data = urllib.parse.urlencode({"chat_id": os.environ["TELEGRAM_CHAT_ID"], "text": msg[:4000]}).encode()
-    urllib.request.urlopen(f"https://api.telegram.org/bot{os.environ['TELEGRAM_TOKEN']}/sendMessage", data, timeout=20)
+    data = urllib.parse.urlencode({"chat_id": os.environ["TELEGRAM_CHAT_ID"].strip(), "text": msg[:4000]}).encode()
+    try:
+        urllib.request.urlopen(f"https://api.telegram.org/bot{os.environ['TELEGRAM_TOKEN'].strip()}/sendMessage", data, timeout=20)
+    except urllib.error.HTTPError as e:
+        print("TELEGRAM ERROR", e.code, e.read().decode()); raise
 json.dump(sorted(seen)[-500:], open(SEEN, "w"))
 print(f"new={len(new)}")
