@@ -1,6 +1,6 @@
 name: nvda-alert
 on:
-  schedule: [{cron: "*/10 * * * *"}]
+  schedule: [{cron: "3,13,23,33,43,53 * * * *"}]
   workflow_dispatch:
 permissions: {contents: write}
 jobs:
